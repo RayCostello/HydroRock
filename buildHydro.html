@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag-and-Drop Hydroponic Simulation</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+        .container { max-width: 800px; margin: auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .drop-zone { width: 200px; height: 200px; margin: 20px auto; border: 2px dashed #4CAF50; display: flex; align-items: center; justify-content: center; }
+        .draggable { width: 100px; height: 100px; margin: 10px; cursor: grab; }
+        .score { font-size: 18px; margin-top: 20px; }
+        .feedback { font-weight: bold; color: green; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Build Your Hydroponic System</h1>
+        <p>Drag and drop the correct components into the system.</p>
+        
+        <div class="drop-zone" id="dropZone">Drop Here</div>
+        
+        <img src="water-tank.png" class="draggable" id="waterTank" draggable="true">
+        <img src="grow-light.png" class="draggable" id="growLight" draggable="true">
+        <img src="nutrient-reservoir.png" class="draggable" id="nutrientReservoir" draggable="true">
+        <img src="air-pump.png" class="draggable" id="airPump" draggable="true">
+        
+        <p class="score">Score: <span id="score">0</span></p>
+        <p id="feedback" class="feedback"></p>
+    </div>
+    
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const draggables = document.querySelectorAll('.draggable');
+        const scoreElement = document.getElementById('score');
+        const feedbackElement = document.getElementById('feedback');
+        let score = 0;
+        const correctItems = ['waterTank', 'growLight', 'nutrientReservoir', 'airPump'];
+        let placedItems = [];
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text', e.target.id);
+            });
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const itemId = e.dataTransfer.getData('text');
+            const item = document.getElementById(itemId);
+            
+            if (!placedItems.includes(itemId)) {
+                placedItems.push(itemId);
+                dropZone.appendChild(item);
+                
+                if (correctItems.includes(itemId)) {
+                    score += 10;
+                    feedbackElement.innerText = "Great! You placed a correct component.";
+                } else {
+                    score -= 5;
+                    feedbackElement.innerText = "Oops! That component doesn't belong here.";
+                }
+                scoreElement.innerText = score;
+            }
+        });
+    </script>
+</body>
+</html>
