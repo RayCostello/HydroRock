@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydroponics Simulation</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        canvas { background-color: #c1f4d7; border: 1px solid #000; }
+        .controls { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Hydroponics Simulation</h1>
+    <canvas id="gameCanvas" width="400" height="500"></canvas>
+    
+    <div class="controls">
+        <label>Water: <input type="range" id="waterSlider" min="0" max="100" value="50"></label>
+        <label>Nutrients: <input type="range" id="nutrientSlider" min="0" max="100" value="50"></label>
+        <label>Light: <input type="range" id="lightSlider" min="0" max="100" value="50"></label>
+    </div>
+    
+    <p id="statusText">Adjust the sliders to grow the plant!</p>
+
+    <script src="game.js"></script>
+</body>
+</html>
