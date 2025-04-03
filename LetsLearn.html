@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydroponics Learning Posters</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .poster { width: 600px; height: 800px; border: 2px solid #000; margin: 20px auto; padding: 20px; position: relative; }
+        .poster img { width: 100%; height: auto; position: absolute; top: 0; left: 0; opacity: 0.3; }
+        .custom-controls { margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Hydroponics Learning Posters</h1>
+    <label for="category">Select a Category:</label>
+    <select id="category" onchange="generatePoster()">
+        <option value="build">What I Need to Build a Hydroponic System</option>
+        <option value="types">Types of Hydroponics</option>
+        <option value="media">Growing Mediums</option>
+        <option value="benefits">Benefits of Hydroponics</option>
+        <option value="future">Future of Hydroponics</option>
+        <option value="problems">Common Problems & Solutions</option>
+        <option value="diy">DIY Hydroponic Systems</option>
+    </select>
+    
+    <div class="custom-controls">
+        <label for="color">Background Color:</label>
+        <input type="color" id="color" onchange="updatePoster()">
+        <label for="font">Font Style:</label>
+        <select id="font" onchange="updatePoster()">
+            <option value="Arial">Arial</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Courier New">Courier New</option>
+        </select>
+    </div>
+    
+    <div id="poster" class="poster">
+        <img id="posterImage" src="" alt="">
+        <h2 id="posterTitle">Select a category to generate a poster</h2>
+        <p id="posterContent"></p>
+    </div>
+    
+    <button onclick="downloadPDF()">Download as PDF</button>
+    
+    <script>
+        const posterData = {
+            build: { title: "Building a Hydroponic System", content: "You need a water reservoir, nutrient solution, pump, and grow trays.", images: ["build1.jpg", "build2.jpg"] },
+            types: { title: "Types of Hydroponics", content: "Popular types include NFT, Deep Water Culture, and Aeroponics.", images: ["types1.jpg", "types2.jpg"] },
+            media: { title: "Hydroponic Growing Mediums", content: "Common mediums include Rockwool, Perlite, and Clay Pellets.", images: ["media1.jpg", "media2.jpg"] },
+            benefits: { title: "Benefits of Hydroponics", content: "Saves water, requires less space, and leads to faster plant growth.", images: ["benefits1.jpg", "benefits2.jpg"] },
+            future: { title: "Future of Hydroponics", content: "Advancements in AI and automation are making hydroponics more efficient.", images: ["future1.jpg", "future2.jpg"] },
+            problems: { title: "Common Hydroponic Problems", content: "Issues include nutrient deficiencies, algae growth, and root rot.", images: ["problems1.jpg", "problems2.jpg"] },
+            diy: { title: "DIY Hydroponics", content: "You can build a small system using household materials like buckets and PVC pipes.", images: ["diy1.jpg", "diy2.jpg"] }
+        };
+        
+        function generatePoster() {
+            const category = document.getElementById("category").value;
+            const data = posterData[category];
+            document.getElementById("posterTitle").innerText = data.title;
+            document.getElementById("posterContent").innerText = data.content;
+            document.getElementById("posterImage").src = data.images[Math.floor(Math.random() * data.images.length)];
+        }
+        
+        function updatePoster() {
+            document.getElementById("poster").style.backgroundColor = document.getElementById("color").value;
+            document.getElementById("poster").style.fontFamily = document.getElementById("font").value;
+        }
+        
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text(document.getElementById("posterTitle").innerText, 20, 30);
+            doc.text(document.getElementById("posterContent").innerText, 20, 50);
+            doc.save("Hydroponics_Poster.pdf");
+        }
+    </script>
+</body>
+</html>
