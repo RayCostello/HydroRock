@@ -361,7 +361,7 @@
 </head>
 <body>
     <header class="header">
-        <div class="logo" style="color: #4BB3FD;">'Hydro - <span style="color: #8B4513;">Rock</span></div>
+        <div class="logo">'Hydro - <span style="color: var(--color-white);">Rock</span></div>
         <nav class="nav">
             <a href="#">Home</a>
             <a href="#">HydroBuild</a>
@@ -370,28 +370,47 @@
             <a href="#">Play Simulation</a>
         </nav>
     </header>
-    <h1 style="color: #4BB3FD;">Hydroponics Learning Posters </h1>
+    <h1>Hydroponics Learning Posters</h1>
     
-    <label for="category">Select a Category:</label>
-    <select id="category" onchange="generatePoster()">
-        <option value="build">What I Need to Build a Hydroponic System</option>
-        <option value="types">Types of Hydroponics</option>
-        <option value="media">Growing Mediums</option>
-        <option value="benefits">Benefits of Hydroponics</option>
-        <option value="future">Future of Hydroponics</option>
-        <option value="problems">Common Problems & Solutions</option>
-        <option value="diy">DIY Hydroponic Systems</option>
-    </select>
-    
-    <div class="custom-controls">
-        <label for="color">Background Color:</label>
-        <input type="color" id="color" onchange="updatePoster()">
-        <label for="font">Font Style:</label>
-        <select id="font" onchange="updatePoster()">
-            <option value="Arial">Arial</option>
-            <option value="Times New Roman">Times New Roman</option>
-            <option value="Courier New">Courier New</option>
-        </select>
+    <div class="controls-container">
+        <h2>Create Your Hydroponic Learning Poster</h2>
+        
+        <div class="control-row">
+            <label for="category">Select a Category:</label>
+            <select id="category" onchange="generatePoster()">
+                <option value="build">What I Need to Build a Hydroponic System</option>
+                <option value="types">Types of Hydroponics</option>
+                <option value="media">Growing Mediums</option>
+                <option value="benefits">Benefits of Hydroponics</option>
+                <option value="future">Future of Hydroponics</option>
+                <option value="problems">Common Problems & Solutions</option>
+                <option value="diy">DIY Hydroponic Systems</option>
+            </select>
+        </div>
+        
+        <div class="control-row">
+            <label for="color">Background Color:</label>
+            <div class="color-options">
+                <div class="color-swatch swatch-rock-dark" onclick="setColor('#8B6242')" title="Rock Brown"></div>
+                <div class="color-swatch swatch-rock-light" onclick="setColor('#C8A887')" title="Light Brown"></div>
+                <div class="color-swatch swatch-water" onclick="setColor('#4BB3FD')" title="Water Blue"></div>
+                <div class="color-swatch swatch-plant" onclick="setColor('#63CF6C')" title="Plant Green"></div>
+                <div class="color-swatch swatch-white" onclick="setColor('#FFFFFF')" title="White"></div>
+                <input type="color" id="color" onchange="updatePoster()" style="margin-left: 10px;">
+            </div>
+        </div>
+        
+        <div class="control-row">
+            <label for="font">Font Style:</label>
+            <select id="font" onchange="updatePoster()">
+                <option value="Arial">Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Trebuchet MS">Trebuchet MS</option>
+            </select>
+        </div>
     </div>
     
     <div class="container">
@@ -406,19 +425,17 @@
         </div>
     </div>
     
-    <button onclick="downloadPDF()">Download as PDF</button>
-
-
+    <button class="download-button" onclick="downloadPDF()">Download as PDF</button>
     
     <script>
         const posterData = {
-            build: { title: "Building a Hydroponic System", content: "You need a water reservoir, nutrient solution, pump, and grow trays.", images: ["build1.jpg", "build2.jpg"] },
-            types: { title: "Types of Hydroponics", content: "Popular types include NFT, Deep Water Culture, and Aeroponics.", images: ["types1.jpg", "types2.jpg"] },
-            media: { title: "Hydroponic Growing Mediums", content: "Common mediums include Rockwool, Perlite, and Clay Pellets.", images: ["media1.jpg", "media2.jpg"] },
-            benefits: { title: "Benefits of Hydroponics", content: "Saves water, requires less space, and leads to faster plant growth.", images: ["benefits1.jpg", "benefits2.jpg"] },
-            future: { title: "Future of Hydroponics", content: "Advancements in AI and automation are making hydroponics more efficient.", images: ["future1.jpg", "future2.jpg"] },
-            problems: { title: "Common Hydroponic Problems", content: "Issues include nutrient deficiencies, algae growth, and root rot.", images: ["problems1.jpg", "problems2.jpg"] },
-            diy: { title: "DIY Hydroponics", content: "You can build a small system using household materials like buckets and PVC pipes.", images: ["diy1.jpg", "diy2.jpg"] }
+            build: { title: "Building a Hydroponic System", content: "You need a water reservoir, nutrient solution, pump, and grow trays. The water reservoir holds the nutrient solution that will feed your plants. Make sure to choose food-safe containers that won't leach chemicals. The nutrient solution contains all the essential elements plants need to grow. A good pump ensures proper circulation and oxygenation. Grow trays support your plants and growing medium.", images: ["build1.jpg", "build2.jpg"] },
+            types: { title: "Types of Hydroponics", content: "Popular types include NFT (Nutrient Film Technique), Deep Water Culture (DWC), and Aeroponics. NFT systems feature a continuous flow of nutrient solution in a thin film over the roots. DWC suspends plant roots directly in nutrient-rich, oxygenated water. Aeroponics mists exposed plant roots with nutrient solution, providing maximum oxygen exposure.", images: ["types1.jpg", "types2.jpg"] },
+            media: { title: "Hydroponic Growing Mediums", content: "Common mediums include Rockwool, Perlite, and Clay Pellets (LECA). Rockwool provides excellent water retention while still allowing good aeration. Perlite is lightweight and prevents compaction while providing good drainage. Clay pellets are reusable, provide good support, and help maintain consistent moisture levels around the roots.", images: ["media1.jpg", "media2.jpg"] },
+            benefits: { title: "Benefits of Hydroponics", content: "Hydroponics saves water (up to 90% less than traditional farming), requires less space, and leads to faster plant growth (30-50% faster than soil). Plants grown hydroponically often have higher nutritional value and are less susceptible to soil-borne diseases. Hydroponic systems can be set up anywhere, including indoors and in urban environments, allowing year-round growing regardless of climate.", images: ["benefits1.jpg", "benefits2.jpg"] },
+            future: { title: "Future of Hydroponics", content: "Advancements in AI and automation are making hydroponics more efficient. Smart systems can now monitor and adjust nutrient levels, pH, and lighting automatically. Vertical farming combines hydroponics with space-efficient designs to maximize yield in urban areas. Researchers are developing new nutrient formulations specific to different plant types for optimal growth and nutritional content.", images: ["future1.jpg", "future2.jpg"] },
+            problems: { title: "Common Hydroponic Problems", content: "Common issues include nutrient deficiencies, algae growth, and root rot. Nutrient deficiencies often appear as discolored leaves and can be corrected by adjusting your nutrient solution. Algae thrive in light and nutrient-rich water - keep reservoirs dark to prevent growth. Root rot is usually caused by insufficient oxygen in the water and can be prevented with proper aeration.", images: ["problems1.jpg", "problems2.jpg"] },
+            diy: { title: "DIY Hydroponics", content: "You can build a small system using household materials like buckets and PVC pipes. A simple Deep Water Culture system can be made with a food-safe bucket, air pump, air stone, and net pots. Kratky method systems require no electricity - just a container, nutrient solution, and a net pot. Mason jar herb gardens are perfect for beginners wanting to grow herbs on windowsills.", images: ["diy1.jpg", "diy2.jpg"] }
         };
         
         let progress = 10;
@@ -436,6 +453,11 @@
             document.getElementById("poster").style.fontFamily = document.getElementById("font").value;
         }
         
+        function setColor(colorValue) {
+            document.getElementById("color").value = colorValue;
+            updatePoster();
+        }
+        
         function markAsStudied() {
             if (progress < 100) {
                 progress += 15;
@@ -444,11 +466,21 @@
         }
         
         function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text(document.getElementById("posterTitle").innerText, 20, 30);
-            doc.text(document.getElementById("posterContent").innerText, 20, 50);
-            doc.save("Hydroponics_Poster.pdf");
+            // Add PDF download functionality when jsPDF is available
+            if (window.jspdf) {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                doc.text(document.getElementById("posterTitle").innerText, 20, 30);
+                doc.text(document.getElementById("posterContent").innerText, 20, 50);
+                doc.save("Hydroponics_Poster.pdf");
+            } else {
+                alert("PDF generation is not available. Please uncomment the jsPDF script in the HTML.");
+            }
+        }
+        
+        // Initialize with default values
+        window.onload = function() {
+            document.getElementById("color").value = "#FFFFFF";
         }
     </script>
 </body>
