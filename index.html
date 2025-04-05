@@ -5,30 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HydroRock Interactive Learning Hub</title>
     <style>
-        body {
-            /* Previous gradient background (commented out) */
-            /* background: linear-gradient(to bottom right, #C8A887, #8B6242); */
-
-            /* 🎥 Video background replaces the gradient */
-            background-image: none;
-            color: white;
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 
-                         'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-            min-height: 100vh;
+        /* Ensure page is scrollable */
+        html, body {
+            height: 100%;
             margin: 0;
-            position: relative;
-            overflow: hidden;
+            padding: 0;
+            overflow-y: auto; /* Allows scrolling */
+            display: flex;
+            flex-direction: column;
         }
 
         /* 🎥 Video Background */
         .video-background {
-            position: fixed;  /* Keeps video in place */
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;  /* Ensures the video fills the screen */
-            z-index: -1;  /* Sends it behind the content */
+            object-fit: cover;
+            z-index: -1; /* Sends it behind content */
         }
 
         /* 🌓 Dark Overlay to Improve Readability */
@@ -42,11 +37,28 @@
             z-index: 0;
         }
 
-        header {
+        /* Body Styling */
+        body {
+            color: white;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 
+                         'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Ensures content takes up space and allows scrolling */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
-            padding: 60px 20px;
+            padding-bottom: 50px;
             position: relative;
-            z-index: 1; /* Ensure header is above video */
+            z-index: 1;
+        }
+
+        header {
+            padding: 60px 20px;
         }
 
         header h1 {
@@ -65,8 +77,6 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px 60px;
-            position: relative;
-            z-index: 1; /* Keep content above video */
         }
 
         a.card {
@@ -89,16 +99,19 @@
             margin-bottom: 10px;
         }
 
+        
         a.card p {
             font-size: 1rem;
         }
 
+        /* Sticky Footer */
         footer {
             text-align: center;
             padding: 20px;
             background-color: #C8A887;
             position: relative;
-            z-index: 1; /* Keep footer above video */
+            z-index: 1;
+            width: 100%;
         }
     </style>
 </head>
@@ -113,12 +126,47 @@
     <!-- 🌓 Dark Overlay for readability -->
     <div class="overlay"></div>
 
-    <header>
-        <h1>Hydroponics Interactive Learning Hub</h1>
-        <p>Explore, Learn, and Grow with Interactive Educational Tools</p>
-    </header>
-    
-    <main>
-        <a href="#" class="card">
-            <h2>Interactive Video Lessons</h2>
-            <p>Watch and engage with videos that include
+    <div class="content">
+        <header>
+            <h1>Hydroponics Interactive Learning Hub</h1>
+            <p>Explore, Learn, and Grow with Interactive Educational Tools</p>
+        </header>
+        
+        <main>
+            <a href="#" class="card">
+                <h2>Interactive Video Lessons</h2>
+                <p>Watch and engage with videos that include questions, hotspots, and branching scenarios.</p>
+            </a>
+            <a href="#" class="card">
+                <h2>Drag-and-Drop Simulations</h2>
+                <p>Build your own hydroponic system with interactive drag-and-drop elements and instant feedback.</p>
+            </a>
+            <a href="#" class="card">
+                <h2>Interactive Quizzes & Challenges</h2>
+                <p>Test your knowledge with fun quizzes and get detailed explanations for every question.</p>
+            </a>
+            <a href="#" class="card">
+                <h2>Data Exploration Widgets</h2>
+                <p>Explore real-time plant growth data and simulate changes in pH, temperature, and more.</p>
+            </a>
+            <a href="#" class="card">
+                <h2>Virtual Garden Tracker</h2>
+                <p>Track your virtual garden progress and earn badges for milestones and growth achievements.</p>
+            </a>
+            <a href="#" class="card">
+                <h2>Interactive Story Journey</h2>
+                <p>Become a virtual hydroponics farmer and make decisions that affect plant growth outcomes.</p>
+            </a>
+            <a href="#" class="card">
+                <h2>Augmented Reality Demo</h2>
+                <p>View 3D models of hydro systems on your phone or tablet using WebAR.</p>
+            </a>
+        </main>
+    </div>
+
+    <footer>
+        <p>© 2025 HydroRock Team | Interactive Learning for a Greener Future 🌱</p>
+    </footer>
+
+</body>
+</html>
