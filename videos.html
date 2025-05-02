@@ -1,600 +1,345 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Videos - Hydro-Rock</title>
-    <style>
-        :root {
-            --color-rock-dark: #8B6242;
-            --color-rock-light: #C8A887;
-            --color-water: #4BB3FD;
-            --color-water-dark: #2290DA;
-            --color-plant: #63CF6C;
-            --color-plant-dark: #4AA852;
-            --color-plant-dying: #A89B45;
-            --color-plant-dead: #A87545;
-            --color-white: #FFFFFF;
-            --color-nutrient: #D69E30;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, var(--color-rock-light), var(--color-white));
-            position: relative;
-            min-height: 100vh;
-            text-align: center;
-            padding-bottom: 100px;
-        }
-
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="20" height="20"><circle cx="50" cy="50" r="25" fill="%23C8A88733"/></svg>');
-            opacity: 0.3;
-            z-index: -1;
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 50px;
-            background: var(--color-rock-dark);
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-            border-bottom: 4px solid var(--color-water);
-            margin-bottom: 20px;
-            color: var(--color-white);
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--color-water);
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .nav {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav a {
-            text-decoration: none;
-            color: var(--color-white);
-            font-size: 16px;
-            padding: 5px 10px;
-            position: relative;
-            transition: all 0.3s ease;
-            border-radius: 4px;
-        }
-
-        .nav a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .nav a::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -3px;
-            width: 100%;
-            height: 2px;
-            background: var(--color-water);
-            opacity: 0.5;
-            transition: opacity 0.3s ease;
-        }
-
-        .nav a:hover::after {
-            opacity: 1;
-        }
-
-        .nav a.active::after {
-            opacity: 1;
-        }
-
-        h1 {
-            margin: 20px 0;
-            color: var(--color-rock-dark) !important;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-            font-size: 36px;
-        }
-
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto 40px;
-            padding: 0 20px;
-        }
-
-        /* Featured Video Section */
-        .featured-video {
-            background-color: var(--color-white);
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            padding: 20px;
-            border: 2px solid var(--color-rock-light);
-            margin-bottom: 30px;
-        }
-
-        .featured-video h2 {
-            color: var(--color-rock-dark);
-            margin-bottom: 15px;
-            text-align: center;
-            border-bottom: 2px solid var(--color-water);
-            padding-bottom: 10px;
-        }
-
-        #main-video {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            background: #000;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        #main-video video,
-        #main-video iframe {
-            width: 100%;
-            height: 450px;
-            border: none;
-        }
-
-        /* Video Categories Tabs */
-        .video-categories {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            gap: 15px;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-
-        .category-tab {
-            background-color: var(--color-white);
-            border: 2px solid var(--color-rock-light);
-            color: var(--color-rock-dark);
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: bold;
-        }
-
-        .category-tab:hover {
-            background-color: var(--color-water);
-            color: var(--color-white);
-            border-color: var(--color-water);
-        }
-
-        .category-tab.active {
-            background-color: var(--color-water-dark);
-            color: var(--color-white);
-            border-color: var(--color-water-dark);
-        }
-
-        /* Video Grid */
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 25px;
-        }
-
-        .video-card {
-            background-color: var(--color-white);
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            border: 2px solid var(--color-rock-light);
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-        }
-
-        .video-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
-        }
-
-        .video-thumbnail {
-            position: relative;
-            overflow: hidden;
-            height: 150px;
-        }
-
-        .video-thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s;
-        }
-
-        .video-card:hover .video-thumbnail img {
-            transform: scale(1.05);
-        }
-
-        .play-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .play-overlay:before {
-            content: "▶";
-            color: var(--color-white);
-            font-size: 40px;
-            background-color: rgba(0,0,0,0.5);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .video-card:hover .play-overlay {
-            opacity: 1;
-        }
-
-        .video-info {
-            padding: 15px;
-        }
-
-        .video-info h3 {
-            color: var(--color-rock-dark);
-            margin-bottom: 5px;
-            font-size: 16px;
-            line-height: 1.3;
-        }
-
-        .video-meta {
-            display: flex;
-            justify-content: space-between;
-            color: #666;
-            font-size: 14px;
-            margin-top: 8px;
-        }
-
-        .video-duration {
-            background-color: var(--color-water);
-            color: var(--color-white);
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-        }
-
-        /* Footer */
-        .footer {
-            background-color: var(--color-rock-dark);
-            border-top: 4px solid var(--color-water);
-            padding: 20px 50px;
-            color: white;
-            font-size: 14px;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-        }
-
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            text-align: center;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .footer-links a {
-            text-decoration: none;
-            color: var(--color-white);
-            position: relative;
-        }
-
-        .footer-links a::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 100%;
-            height: 1px;
-            background: var(--color-water);
-            opacity: 0.5;
-            transition: opacity 0.3s;
-        }
-
-        .footer-links a:hover::after {
-            opacity: 1;
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 10px;
-                padding: 15px;
-            }
-            
-            .nav {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 15px;
-            }
-
-            #main-video video,
-            #main-video iframe {
-                height: 300px;
-            }
-
-            .video-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-        }
-
-        @media (max-width: 480px) {
-            #main-video video,
-            #main-video iframe {
-                height: 240px;
-            }
-
-            .video-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Videos – Hydro-Rock</title>
+  <style>
+    :root {
+      --color-rock-dark: #8B6242;
+      --color-rock-light: #C8A887;
+      --color-water: #4BB3FD;
+      --color-water-dark: #2290DA;
+      --color-white: #FFFFFF;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, var(--color-rock-light), var(--color-white));
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: var(--color-rock-dark);
+      color: var(--color-white);
+    }
+    .logo img { max-height: 75px; }
+    .nav { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .nav a {
+      color: var(--color-white);
+      text-decoration: none;
+      padding: .5rem 1rem;
+      position: relative;
+    }
+    .nav a.active,
+    .nav a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 1rem auto;
+      padding: 0 1rem;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: var(--color-rock-dark);
+    }
+    .featured-video {
+      margin-bottom: 2rem;
+    }
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 */
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .video-container iframe {
+      position: absolute;
+      top:0; left:0;
+      width:100%; height:100%;
+      border:0;
+    }
+    .video-categories {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      list-style: none;
+      padding: 0;
+      gap: .5rem;
+      margin-bottom: 2rem;
+    }
+    .video-categories li {
+      padding: .5rem 1rem;
+      background: var(--color-white);
+      border: 2px solid var(--color-rock-light);
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: .2s;
+    }
+    .video-categories li.active,
+    .video-categories li:hover {
+      background: var(--color-water);
+      color: var(--color-white);
+      border-color: var(--color-water);
+    }
+    .video-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+    .video-card {
+      cursor: pointer;
+      border: 2px solid var(--color-rock-light);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--color-white);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform .2s, box-shadow .2s;
+      position: relative;
+    }
+    .video-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+    }
+    .thumbnail {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%;
+    }
+    .thumbnail img {
+      position: absolute;
+      top:0; left:0;
+      width:100%; height:100%;
+      object-fit: cover;
+    }
+    .play-overlay {
+      position: absolute;
+      top:0; left:0; right:0; bottom:0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.3);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .video-card:hover .play-overlay {
+      opacity: 1;
+    }
+    .play-overlay::before {
+      content: "▶";
+      font-size: 2.5rem;
+      color: var(--color-white);
+    }
+    .video-info {
+      padding: .75rem;
+    }
+    .video-info h3 {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--color-rock-dark);
+      line-height: 1.2;
+    }
+    .video-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: .85rem;
+      color: #666;
+      margin-top: .5rem;
+    }
+    footer {
+      background: var(--color-rock-dark);
+      color: var(--color-white);
+      text-align: center;
+      padding: 1rem;
+    }
+    footer a {
+      color: var(--color-water);
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
     <header class="header">
-        <div class="logo">'Hydro - <span style="color: var(--color-white);">Rock</span></div>
+        <div class="logo">
+          <img src="images/HydroRockLogo.png" alt="HydroRock Logo" >
+        </div>
         <nav class="nav">
-            <a href="index.html">Home</a>
-            <a href="buildHydro.html">HydroBuild</a>
-            <a href="camTracker.html">Cam_Tracker</a>
-            <a href="videos.html">Videos</a>
-            <a href="play.html">Play Simulation</a>
-        </nav>
-    </header>
+          <a href="index.html">Home</a>
+          <a href="camTracker.html">Cam_Tracker</a>
+          <a href="play.html">Play Simulation</a>
+          <a href="buildHydro.html">HydroBuild</a>
+          <a href="LetsLearn.html">HydroLearn</a>
 
+          
+
+        </nav>
+      </header>
+
+  <main>
     <h1>Hydroponic Video Library</h1>
 
-    <div class="main-container">
-        <!-- Featured Video Section -->
-        <div class="featured-video">
-            <h2>Featured Video</h2>
-            <div id="main-video">
-                <img src="/api/placeholder/800/450" alt="Featured Video Placeholder">
-            </div>
+    <section class="featured-video">
+      <h2>Featured</h2>
+      <div class="video-container" id="main-video">
+        <!-- default featured embed -->
+        <iframe src="https://www.youtube.com/embed/dLEVQw-bHhc" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <ul class="video-categories">
+      <li data-cat="all" class="active">All</li>
+      <li data-cat="engineering">Engineering</li>
+      <li data-cat="hydroponics">Hydroponics</li>
+      <li data-cat="growth">Growth Media</li>
+      <li data-cat="tutorials">Tutorials</li>
+    </ul>
+
+    <div class="video-grid">
+      <!-- Engineering System Overview -->
+      <div class="video-card" data-cat="engineering" data-id="PYqwcaJlep0">
+        <div class="thumbnail">
+          <img src="https://img.youtube.com/vi/PYqwcaJlep0/hqdefault.jpg" alt="Engineering System Overview">
+          <div class="play-overlay"></div>
         </div>
-
-        <!-- Video Categories -->
-        <ul class="video-categories">
-            <li class="category-tab active" data-category="all">All Videos</li>
-            <li class="category-tab" data-category="engineering">Engineering</li>
-            <li class="category-tab" data-category="hydroponics">Hydroponics</li>
-            <li class="category-tab" data-category="growth">Growth Media</li>
-            <li class="category-tab" data-category="tutorials">Tutorials</li>
-        </ul>
-
-        <!-- Video Grid -->
-        <div class="video-grid">
-            <!-- Engineering Video -->
-            <div class="video-card" data-category="engineering">
-                <div class="video-thumbnail">
-                    <img src="/api/placeholder/250/150" alt="Engineering System Overview">
-                    <div class="play-overlay"></div>
-                    <span class="video-duration">4:32</span>
-                </div>
-                <div class="video-info">
-                    <h3>Engineering System Overview</h3>
-                    <div class="video-meta">
-                        <span>Mar 15, 2025</span>
-                        <span>1.2K views</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hydroponics Video -->
-            <div class="video-card" data-category="hydroponics">
-                <div class="video-thumbnail">
-                    <img src="/api/placeholder/250/150" alt="Nutrient Management">
-                    <div class="play-overlay"></div>
-                    <span class="video-duration">6:14</span>
-                </div>
-                <div class="video-info">
-                    <h3>Nutrient Management for Optimal Growth</h3>
-                    <div class="video-meta">
-                        <span>Feb 28, 2025</span>
-                        <span>3.4K views</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Growth Media Video -->
-            <div class="video-card" data-category="growth">
-                <div class="video-thumbnail">
-                    <img src="/api/placeholder/250/150" alt="Rock Wool vs Clay Pebbles">
-                    <div class="play-overlay"></div>
-                    <span class="video-duration">8:47</span>
-                </div>
-                <div class="video-info">
-                    <h3>Rock Wool vs Clay Pebbles: Pros and Cons</h3>
-                    <div class="video-meta">
-                        <span>Mar 22, 2025</span>
-                        <span>1.8K views</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tutorial Video -->
-            <div class="video-card" data-category="tutorials">
-                <div class="video-thumbnail">
-                    <img src="/api/placeholder/250/150" alt="DIY Hydroponic System">
-                    <div class="play-overlay"></div>
-                    <span class="video-duration">12:05</span>
-                </div>
-                <div class="video-info">
-                    <h3>DIY Hydroponic System for Beginners</h3>
-                    <div class="video-meta">
-                        <span>Apr 02, 2025</span>
-                        <span>5.6K views</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Engineering Video -->
-            <div class="video-card" data-category="engineering">
-                <div class="video-thumbnail">
-                    <img src="/api/placeholder/250/150" alt="Pump Systems">
-                    <div class="play-overlay"></div>
-                    <span class="video-duration">7:23</span>
-                </div>
-                <div class="video-info">
-                    <h3>Pump Systems for Efficient Water Circulation</h3>
-                    <div class="video-meta">
-                        <span>Mar 27, 2025</span>
-                        <span>976 views</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hydroponics Video -->
-            <div class="video-card" data-category="hydroponics">
-                <div class="video-thumbnail">
-                    <img src="/api/placeholder/250/150" alt="Plant Spacing">
-                    <div class="play-overlay"></div>
-                    <span class="video-duration">5:16</span>
-                </div>
-                <div class="video-info">
-                    <h3>Optimal Plant Spacing in Hydroponic Systems</h3>
-                    <div class="video-meta">
-                        <span>Apr 05, 2025</span>
-                        <span>621 views</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tutorials Video -->
-            <div class="video-card" data-category="tutorials">
-                <div class="video-thumbnail">
-                    <img src="/api/placeholder/250/150" alt="pH Management">
-                    <div class="play-overlay"></div>
-                    <span class="video-duration">9:38</span>
-                </div>
-                <div class="video-info">
-                    <h3>pH Management for Hydroponic Gardens</h3>
-                    <div class="video-meta">
-                        <span>Mar 10, 2025</span>
-                        <span>2.7K views</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Growth Media Video -->
-            <div class="video-card" data-category="growth">
-                <div class="video-thumbnail">
-                    <img src="/api/placeholder/250/150" alt="Growth Media Comparison">
-                    <div class="play-overlay"></div>
-                    <span class="video-duration">11:29</span>
-                </div>
-                <div class="video-info">
-                    <h3>Complete Guide to Hydroponic Growth Media</h3>
-                    <div class="video-meta">
-                        <span>Feb 15, 2025</span>
-                        <span>4.3K views</span>
-                    </div>
-                </div>
-            </div>
+        <div class="video-info">
+          <h3>Engineering System Overview</h3>
+          <div class="video-meta">
+            <span>Mar 15, 2025</span>
+            <span>1.2K views</span>
+          </div>
         </div>
+      </div>
+
+      <!-- Nutrient Management for Optimal Growth -->
+      <div class="video-card" data-cat="hydroponics" data-id="tI2K45je-Rw">
+        <div class="thumbnail">
+          <img src="https://img.youtube.com/vi/tI2K45je-Rw/hqdefault.jpg" alt="Nutrient Management">
+          <div class="play-overlay"></div>
+        </div>
+        <div class="video-info">
+          <h3>Nutrient Management for Optimal Growth</h3>
+          <div class="video-meta">
+            <span>Feb 28, 2025</span>
+            <span>3.4K views</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rock Wool vs Clay Pebbles: Pros & Cons -->
+      <div class="video-card" data-cat="growth" data-id="4Yod04di3zE">
+        <div class="thumbnail">
+          <img src="https://img.youtube.com/vi/4Yod04di3zE/hqdefault.jpg" alt="Rock Wool vs Clay Pebbles">
+          <div class="play-overlay"></div>
+        </div>
+        <div class="video-info">
+          <h3>Rock Wool vs Clay Pebbles: Pros & Cons</h3>
+          <div class="video-meta">
+            <span>Mar 22, 2025</span>
+            <span>1.8K views</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIY Hydroponic System for Beginners -->
+      <div class="video-card" data-cat="tutorials" data-id="dLEVQw-bHhc">
+        <div class="thumbnail">
+          <img src="https://img.youtube.com/vi/dLEVQw-bHhc/hqdefault.jpg" alt="DIY Hydroponic System">
+          <div class="play-overlay"></div>
+        </div>
+        <div class="video-info">
+          <h3>DIY Hydroponic System for Beginners</h3>
+          <div class="video-meta">
+            <span>Apr 02, 2025</span>
+            <span>5.6K views</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pump Systems for Efficient Water Circulation -->
+      <div class="video-card" data-cat="engineering" data-id="NbSE_x_FUJk">
+        <div class="thumbnail">
+          <img src="https://img.youtube.com/vi/NbSE_x_FUJk/hqdefault.jpg" alt="Pump Systems">
+          <div class="play-overlay"></div>
+        </div>
+        <div class="video-info">
+          <h3>Pump Systems for Efficient Water Circulation</h3>
+          <div class="video-meta">
+            <span>Mar 27, 2025</span>
+            <span>976 views</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optimal Plant Spacing in Hydroponic Systems -->
+      <div class="video-card" data-cat="hydroponics" data-id="5No9K3wnx7U">
+        <div class="thumbnail">
+          <img src="https://img.youtube.com/vi/5No9K3wnx7U/hqdefault.jpg" alt="Optimal Plant Spacing">
+          <div class="play-overlay"></div>
+        </div>
+        <div class="video-info">
+          <h3>Optimal Plant Spacing in Hydroponic Systems</h3>
+          <div class="video-meta">
+            <span>Apr 05, 2025</span>
+            <span>621 views</span>
+          </div>
+        </div>
+      </div>
     </div>
+  </main>
 
-    <footer class="footer">
-        <p>© 2025 HydroRock Team | Interactive Learning for a Greener Future 🌱</p>
-        <p>
-            Visit our hydroponic Dashboard:
-            <a
-              href="https://hydrorock-monitoring.onrender.com/ui/"
-              target="_blank"
-              rel="noopener"
-            >
-              HydroRock Dashboard
-            </a>
-          </p>
-    </footer>
+  <footer>
+    <p>© 2025 HydroRock Team | Interactive Learning for a Greener Future 🌱</p>
+    <p>
+      <a href="https://hydrorock-monitoring.onrender.com/ui/" target="_blank" rel="noopener">
+        View HydroRock Dashboard
+      </a>
+    </p>
+  </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get all elements
-            const categoryTabs = document.querySelectorAll('.category-tab');
-            const videoCards = document.querySelectorAll('.video-card');
-            const mainVideo = document.getElementById('main-video');
-            
-            // Function to update the main video
-            function updateMainVideo(videoSrc, title) {
-                // You would typically update with actual video source
-                // For now just update with placeholder
-                mainVideo.innerHTML = `
-                    <img src="/api/placeholder/800/450" alt="Video Player - ${title}">
-                `;
-       
-            }
-            
-            // Add click event for category tabs
-            categoryTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // Remove active class from all tabs
-                    categoryTabs.forEach(t => t.classList.remove('active'));
-                    
-                    // Add active class to clicked tab
-                    this.classList.add('active');
-                    
-                    const category = this.getAttribute('data-category');
-                    
-                    // Show/hide video cards based on category
-                    videoCards.forEach(card => {
-                        if (category === 'all' || card.getAttribute('data-category') === category) {
-                            card.style.display = 'block';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-                });
-            });
-            
-            // Add click event for video cards
-            videoCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const title = this.querySelector('h3').textContent;
-                    // In a real implementation, you would get the actual video source
-                    const videoSrc = "your-video-source.mp4";
-                    updateMainVideo(videoSrc, title);
-                    
-                    // Scroll to the main video
-                    mainVideo.scrollIntoView({behavior: 'smooth'});
-                });
-            });
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabs = document.querySelectorAll('.video-categories li');
+      const cards = document.querySelectorAll('.video-card');
+      const iframe = document.querySelector('#main-video iframe');
+
+      // Category filtering
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const cat = tab.getAttribute('data-cat');
+          cards.forEach(c => {
+            c.style.display = (cat === 'all' || c.dataset.cat === cat) ? 'block' : 'none';
+          });
         });
-    </script>
+      });
+
+      // Load selected video
+      cards.forEach(card => {
+        card.addEventListener('click', () => {
+          const vid = card.dataset.id;
+          iframe.src = `https://www.youtube.com/embed/${vid}?autoplay=1`;
+          card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    });
+  </script>
 </body>
 </html>

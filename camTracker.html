@@ -1,588 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hydroponic System Dashboard</title>
-    <style>
-        :root {
-            --color-rock-dark: #8B6242;
-            --color-rock-light: #C8A887;
-            --color-water: #4BB3FD;
-            --color-water-dark: #2290DA;
-            --color-plant: #63CF6C;
-            --color-plant-dark: #4AA852;
-            --color-plant-dying: #A89B45;
-            --color-plant-dead: #A87545;
-            --color-white: #FFFFFF;
-            --color-nutrient: #D69E30;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, var(--color-rock-light), var(--color-white));
-            position: relative;
-            min-height: 100vh;
-            text-align: center;
-            padding-bottom: 100px;
-        }
-
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="20" height="20"><circle cx="50" cy="50" r="25" fill="%23C8A88733"/></svg>');
-            opacity: 0.3;
-            z-index: -1;
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 50px;
-            background: var(--color-rock-dark);
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-            border-bottom: 4px solid var(--color-water);
-            margin-bottom: 20px;
-            color: var(--color-white);
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--color-water);
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .nav {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav a {
-            text-decoration: none;
-            color: var(--color-white);
-            font-size: 16px;
-            padding: 5px 10px;
-            position: relative;
-            transition: all 0.3s ease;
-            border-radius: 4px;
-        }
-
-        .nav a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .nav a::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -3px;
-            width: 100%;
-            height: 2px;
-            background: var(--color-water);
-            opacity: 0.5;
-            transition: opacity 0.3s ease;
-        }
-
-        .nav a:hover::after {
-            opacity: 1;
-        }
-
-        h1 {
-            margin: 20px 0;
-            color: var(--color-rock-dark) !important;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-            font-size: 36px;
-        }
-
-        .dashboard-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto 40px;
-            padding: 0 20px;
-        }
-
-        .dashboard-card {
-            background-color: var(--color-white);
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            padding: 20px;
-            border: 2px solid var(--color-rock-light);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .dashboard-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .dashboard-card h2 {
-            color: var(--color-rock-dark);
-            text-align: center;
-            margin-top: 0;
-            border-bottom: 2px solid var(--color-water);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-
-        .live-feed {
-            grid-column: span 2;
-        }
-
-        .live-feed img, .live-feed video {
-            width: 100%;
-            border-radius: 8px;
-            border: 2px solid var(--color-rock-light);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            max-height: 360px;
-            object-fit: cover;
-        }
-
-        .sensor-data {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .sensor-card {
-            background-color: var(--color-water-dark);
-            color: var(--color-white);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .sensor-card h3 {
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-
-        .sensor-card .value {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .garden-tracker {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .tracker-section {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .tracker-icon {
-            width: 40px;
-            height: 40px;
-            background-color: var(--color-plant);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        .tracker-info {
-            flex: 1;
-            text-align: left;
-        }
-
-        .tracker-info h3 {
-            color: var(--color-rock-dark);
-            margin-bottom: 5px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background-color: var(--color-rock-light);
-            border-radius: 5px;
-            margin-top: 5px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background-color: var(--color-plant);
-            border-radius: 5px;
-        }
-
-        .mini-chart {
-            width: 100%;
-            height: 100px;
-            margin-top: 15px;
-            border: 1px solid var(--color-rock-light);
-            border-radius: 8px;
-        }
-
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .action-button {
-            background-color: var(--color-plant);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 10px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .action-button:hover {
-            background-color: var(--color-plant-dark);
-        }
-
-        .control-slider {
-            width: 100%;
-            margin: 10px 0;
-        }
-
-        .control-slider label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-            color: var(--color-rock-dark);
-            font-weight: bold;
-        }
-
-        .control-slider input {
-            width: 100%;
-            accent-color: var(--color-water);
-        }
-
-        .footer {
-            background-color: var(--color-rock-dark);
-            border-top: 4px solid var(--color-water);
-            padding: 20px 50px;
-            color: white;
-            font-size: 14px;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-        }
-
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            text-align: center;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .footer-links a {
-            text-decoration: none;
-            color: var(--color-white);
-            position: relative;
-        }
-
-        .footer-links a::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 100%;
-            height: 1px;
-            background: var(--color-water);
-            opacity: 0.5;
-            transition: opacity 0.3s;
-        }
-
-        .footer-links a:hover::after {
-            opacity: 1;
-        }
-
-        @media (max-width: 768px) {
-            .live-feed {
-                grid-column: span 1;
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 10px;
-                padding: 15px;
-            }
-            
-            .nav {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hydroponic System Dashboard</title>
+  <style>
+    :root {
+      --color-rock-dark: #8B6242;
+      --color-rock-light: #C8A887;
+      --color-water: #4BB3FD;
+      --color-water-dark: #2290DA;
+      --color-white: #FFFFFF;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, var(--color-rock-light), var(--color-white));
+      min-height:100vh; text-align:center; padding-bottom:40px;
+    }
+    .header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:15px 50px; background:var(--color-rock-dark);
+      color:var(--color-white); box-shadow:0 2px 5px rgba(0,0,0,0.3);
+      border-bottom:4px solid var(--color-water);
+    }
+    .logo img { max-height:60px; }
+    .nav { display:flex; gap:30px; }
+    .nav a {
+      color:var(--color-white); text-decoration:none;
+      font-size:16px; padding:5px 8px; border-radius:4px;
+      transition:background 0.3s;
+    }
+    .nav a:hover { background:rgba(255,255,255,0.1); }
+    h1 {
+      margin:20px 0; font-size:32px;
+      color:var(--color-rock-dark); text-shadow:1px 1px 2px rgba(0,0,0,0.1);
+    }
+    .dashboard-container {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(300px,1fr));
+      gap:20px;
+      max-width:1000px;
+      margin:0 auto;
+      padding:0 20px;
+    }
+    .dashboard-card {
+      background:var(--color-white);
+      border:2px solid var(--color-rock-light);
+      border-radius:8px;
+      padding:20px;
+      box-shadow:0 3px 10px rgba(0,0,0,0.1);
+    }
+    .live-feed { grid-column:span 2; }
+    .live-feed video {
+      width:100%; height:auto; border-radius:8px;
+      border:2px solid var(--color-rock-light);
+      box-shadow:0 3px 8px rgba(0,0,0,0.1);
+    }
+    .sensor-data {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+      gap:15px;
+      margin-top:15px;
+    }
+    .sensor-card {
+      background:var(--color-water-dark);
+      color:var(--color-white);
+      padding:15px;
+      border-radius:8px;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+    }
+    .sensor-card h3 { font-size:16px; margin-bottom:5px; }
+    .sensor-card .value { font-size:24px; font-weight:bold; }
+    /* Check-In Tracker styles */
+    .tracker { text-align:left; }
+    .tracker p { margin:0.5em 0; }
+    .tracker .value { font-size:28px; font-weight:bold; color:var(--color-rock-dark); }
+    .badge-container { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:10px; }
+    .badge { background:var(--color-water); color:white; padding:6px 12px; border-radius:12px; font-size:14px; }
+    .action-button {
+      background:var(--color-water); color:#fff; border:none;
+      border-radius:4px; padding:10px 20px; font-size:14px;
+      cursor:pointer; margin-top:15px;
+      transition:background 0.2s;
+    }
+    .action-button:hover { background:var(--color-water-dark); }
+    footer {
+      background:var(--color-rock-dark); color:var(--color-white);
+      padding:20px; margin-top:40px;
+    }
+    @media(max-width:768px){
+      .header { flex-direction:column; gap:10px; }
+      .nav { flex-wrap:wrap; justify-content:center; }
+      .live-feed { grid-column:span 1; }
+    }
+  </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">'Hydro - <span style="color: var(--color-white);">Rock</span></div>
-        <nav class="nav">
-            <a href="index.html">Home</a>
-            <a href="buildHydro.html">HydroBuild</a>
-            <a href="camTracker.html">Cam_Tracker</a>
-            <a href="videos.html">Videos</a>
-            <a href="play.html">Play Simulation</a>
-        </nav>
-    </header>
+  <header class="header">
+    <div class="logo">
+      <img src="images/HydroRockLogo.png" alt="HydroRock Logo">
+    </div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="videos.html">Videos</a>
+      <a href="play.html">Play Simulation</a>
+      <a href="buildHydro.html">HydroBuild</a>
+      <a href="LetsLearn.html">HydroLearn</a>
+    </nav>
+  </header>
 
-    <h1>Hydroponic System Dashboard</h1>
+  <h1>Hydroponic System Dashboard</h1>
 
-    <div class="dashboard-container">
-        <!-- Live Feed Section -->
-        <div class="dashboard-card live-feed">
-            <h2>Live Camera Feed</h2>
-            <img id="liveImage" src="/api/placeholder/640/360" alt="Live Camera Feed" />
-            
-            <div class="sensor-data">
-                <div class="sensor-card">
-                    <h3>Temperature</h3>
-                    <div id="temp" class="value">24°C</div>
-                </div>
-                <div class="sensor-card">
-                    <h3>Humidity</h3>
-                    <div id="humidity" class="value">65%</div>
-                </div>
-                <div class="sensor-card">
-                    <h3>Water pH</h3>
-                    <div id="ph" class="value">6.5</div>
-                </div>
-                <div class="sensor-card">
-                    <h3>Nutrient Level</h3>
-                    <div id="nutrient" class="value">780 ppm</div>
-                </div>
-            </div>
+  <div class="dashboard-container">
+    <!-- Live Feed + Sensors -->
+    <div class="dashboard-card live-feed">
+      <h2>Live Camera Feed</h2>
+      <!-- TODO: Replace placeholder with your ESP32 stream -->
+      <video 
+        id="liveFeed" 
+        autoplay 
+        muted 
+        playsinline 
+        src="VIDEO_STREAM_URL_HERE">
+      </video>
+
+      <div class="sensor-data">
+        <div class="sensor-card">
+          <h3>Temperature</h3>
+          <div id="temp" class="value">--°C</div>
         </div>
-        
-        <!-- Virtual Garden Tracker Card -->
-        <div class="dashboard-card garden-tracker">
-            <h2>Garden Tracker</h2>
-            
-            <div class="tracker-section">
-                <div class="tracker-icon">🌱</div>
-                <div class="tracker-info">
-                    <h3>Plant Growth</h3>
-                    <p>Day 14 of 30</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 45%;"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="tracker-section">
-                <div class="tracker-icon">🥇</div>
-                <div class="tracker-info">
-                    <h3>Achievements</h3>
-                    <p>3 of 8 badges earned</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 37.5%;"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="tracker-section">
-                <div class="tracker-icon">📈</div>
-                <div class="tracker-info">
-                    <h3>Growth Trend</h3>
-                    <p>+2.5cm in last week</p>
-                    <div class="mini-chart" id="growthChart"></div>
-                </div>
-            </div>
+        <div class="sensor-card">
+          <h3>Humidity</h3>
+          <div id="humidity" class="value">--%</div>
         </div>
-        
-        <!-- System Controls Card -->
-        <div class="dashboard-card">
-            <h2>System Controls</h2>
-            
-            <div class="control-slider">
-                <label>
-                    Light Intensity
-                    <span id="lightValue">75%</span>
-                </label>
-                <input type="range" id="lightSlider" min="0" max="100" value="75">
-            </div>
-            
-            <div class="control-slider">
-                <label>
-                    Water Pump
-                    <span id="pumpValue">50%</span>
-                </label>
-                <input type="range" id="pumpSlider" min="0" max="100" value="50">
-            </div>
-            
-            <div class="control-slider">
-                <label>
-                    Nutrient Dispenser
-                    <span id="nutrientValue">40%</span>
-                </label>
-                <input type="range" id="nutrientSlider" min="0" max="100" value="40">
-            </div>
-            
-            <div class="quick-actions">
-                <button class="action-button">Run Water Cycle</button>
-                <button class="action-button">Add Nutrients</button>
-                <button class="action-button">Capture Image</button>
-                <button class="action-button">System Restart</button>
-            </div>
+        <div class="sensor-card">
+          <h3>Water Level</h3>
+          <div id="water" class="value">--</div>
         </div>
-        
-        <!-- Plant Health Card -->
-        <div class="dashboard-card">
-            <h2>Plant Health Status</h2>
-            
-            <div class="tracker-section">
-                <div class="tracker-icon" style="background-color: var(--color-plant-dark);">🌿</div>
-                <div class="tracker-info">
-                    <h3>Overall Health</h3>
-                    <p>Excellent</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 92%;"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="sensor-data">
-                <div class="sensor-card" style="background-color: var(--color-plant);">
-                    <h3>Leaf Color</h3>
-                    <div class="value">Vibrant</div>
-                </div>
-                <div class="sensor-card" style="background-color: var(--color-plant);">
-                    <h3>Growth Rate</h3>
-                    <div class="value">Normal</div>
-                </div>
-            </div>
-            
-            <div class="tracker-section">
-                <div class="tracker-icon" style="background-color: var(--color-water-dark);">💧</div>
-                <div class="tracker-info">
-                    <h3>Water Consumption</h3>
-                    <p>1.2L/day (Normal)</p>
-                    <div class="mini-chart" id="waterChart"></div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 
-    <footer class="footer">
-        <p>© 2025 HydroRock Team | Interactive Learning for a Greener Future 🌱</p>
-        <p>
-            Visit our hydroponic Dashboard:
-            <a
-              href="https://hydrorock-monitoring.onrender.com/ui/"
-              target="_blank"
-              rel="noopener"
-            >
-              HydroRock Dashboard
-            </a>
-          </p>
-    </footer>
+    <!-- Check-In Tracker Card -->
+    <div class="dashboard-card tracker">
+      <h2>Check-In Tracker</h2>
+      <p>Days since last system check:</p>
+      <div id="daysSince" class="value">--</div>
+      <p>Badges earned:</p>
+      <div id="badges" class="badge-container"></div>
+      <button id="checkInBtn" class="action-button">I’ve checked ✔️</button>
+    </div>
+  </div>
 
-    <script>
-        // Function to fetch sensor data from Node-RED
-        async function updateSensorData() {
-            try {
-                // Replace with your Node-RED sensor data endpoint URL
-                const response = await fetch('http://your-node-red-server/sensor-data');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                // Update sensor data displays
-                document.getElementById('temp').innerText = data.temperature + '°C';
-                document.getElementById('humidity').innerText = data.humidity + '%';
-                document.getElementById('ph').innerText = data.ph || '6.5';
-                document.getElementById('nutrient').innerText = data.nutrientPpm + ' ppm';
-            } catch (error) {
-                console.error('Error fetching sensor data:', error);
-                // Display sample data if fetch fails (for demo purposes)
-                document.getElementById('temp').innerText = '24°C';
-                document.getElementById('humidity').innerText = '65%';
-                document.getElementById('ph').innerText = '6.5';
-                document.getElementById('nutrient').innerText = '780 ppm';
-            }
+  <footer>
+    <p>© 2025 HydroRock Team | Interactive Learning for a Greener Future 🌱</p>
+    <p>Dashboard: 
+      <a 
+        href="https://hydrorock-monitoring.onrender.com/ui/" 
+        target="_blank" rel="noopener">
+        HydroRock Dashboard
+      </a>
+    </p>
+  </footer>
+
+  <script>
+    // Sensor update from Node-RED
+    async function updateSensorData() {
+      try {
+        const r = await fetch('https://hydrorock-monitoring.onrender.com/esp32/sensors');
+        const d = await r.json();
+        document.getElementById('temp').innerText     = d.temperature + '°C';
+        document.getElementById('humidity').innerText = d.humidity + '%';
+        document.getElementById('water').innerText    = d.water_level;
+      } catch(err) {
+        console.error('Sensor fetch error', err);
+      }
+    }
+
+    // Check-In Tracker using Node-RED endpoint
+    async function updateTracker() {
+      try {
+        const r = await fetch('https://hydrorock-monitoring.onrender.com/lastcheck');
+        const { last } = await r.json();             // { last: <timestamp> }
+        const days = Math.floor((Date.now() - last)/(24*60*60*1000));
+        document.getElementById('daysSince').innerText = days;
+        // one badge per 7-day interval
+        const badgeContainer = document.getElementById('badges');
+        badgeContainer.innerHTML = '';
+        for (let i=7; i<=days; i+=7) {
+          const span = document.createElement('span');
+          span.className = 'badge';
+          span.innerText = 'Week ' + (i/7) + ' ✅';
+          badgeContainer.append(span);
         }
-        
-        // Update slider value displays
-        function updateSliderValues() {
-            const lightSlider = document.getElementById('lightSlider');
-            const pumpSlider = document.getElementById('pumpSlider');
-            const nutrientSlider = document.getElementById('nutrientSlider');
-            
-            document.getElementById('lightValue').innerText = lightSlider.value + '%';
-            document.getElementById('pumpValue').innerText = pumpSlider.value + '%';
-            document.getElementById('nutrientValue').innerText = nutrientSlider.value + '%';
-            
-            // Add event listeners to update values in real-time
-            lightSlider.addEventListener('input', () => {
-                document.getElementById('lightValue').innerText = lightSlider.value + '%';
-            });
-            
-            pumpSlider.addEventListener('input', () => {
-                document.getElementById('pumpValue').innerText = pumpSlider.value + '%';
-            });
-            
-            nutrientSlider.addEventListener('input', () => {
-                document.getElementById('nutrientValue').innerText = nutrientSlider.value + '%';
-            });
-        }
-        
-        // Refresh camera feed
-        function refreshCameraFeed() {
-            const img = document.getElementById('liveImage');
-            // Append timestamp to avoid caching (if needed)
-            const baseUrl = 'http://your-camera-feed-url/mjpeg';
-            // img.src = baseUrl + '?t=' + new Date().getTime();
-            // Using placeholder for demo
-        }
-        
-        // Initialize and update data
-        function initDashboard() {
-            updateSensorData();
-            updateSliderValues();
-            
-            // Set up intervals for periodic updates
-            setInterval(updateSensorData, 5000);
-            setInterval(refreshCameraFeed, 5000);
-            
-            // Set up event listeners for action buttons
-            const actionButtons = document.querySelectorAll('.action-button');
-            actionButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    alert('Action: ' + this.innerText + ' triggered!');
-                });
-            });
-        }
-        
-        // Initialize when DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', initDashboard);
-    </script>
+      } catch(err) {
+        console.error('Tracker fetch error', err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateSensorData();
+      updateTracker();
+      setInterval(updateSensorData, 5000);
+      // no need interval for tracker—Node-RED reminder resets lastcheck
+      document.getElementById('checkInBtn').addEventListener('click', async() => {
+        // call Node-RED to record check-in
+        await fetch('https://hydrorock-monitoring.onrender.com/checkin', { method:'POST' });
+        updateTracker();
+      });
+    });
+  </script>
 </body>
 </html>

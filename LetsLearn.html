@@ -1,501 +1,414 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hydroponics Learning Posters</title>
-   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>-->
-    <style>
-        :root {
-            --color-rock-dark: #8B6242;
-            --color-rock-light: #C8A887;
-            --color-water: #4BB3FD;
-            --color-plant: #63CF6C;
-            --color-white: #FFFFFF;
-        }
-* {
-    
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Hydroponics Learning Posters</title>
 
-        body {
-            font-family: Arial, sans-serif;
-           /* background-color: #f8f8f8; */
-            background: linear-gradient(to bottom, var(--color-rock-light), var(--color-white));
-            position: relative;
-            min-height: 100vh;
-        }
+  <!-- html2canvas & jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="20" height="20"><circle cx="50" cy="50" r="25" fill="%23C8A88733"/></svg>');
-            opacity: 0.3;
-            z-index: -1;
-        }
+  <style>
+    :root {
+      --color-rock-dark: #8B6242;
+      --color-water:     #4BB3FD;
+      --color-plant:     #63CF6C;
+      --color-light:     #FFF9E5; /* light yellow */
+      --color-white:     #FFFFFF;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #C8A887, #FFFFFF);
+      color: var(--color-rock-dark);
+      min-height:100vh;
+    }
+    /* Header/nav */
+    .header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:15px 40px; background:var(--color-rock-dark);
+      border-bottom:4px solid var(--color-water);
+    }
+    .logo img { max-height: 75px; }
+    .nav { display:flex; gap:20px; }
+    .nav a {
+      color:white; text-decoration:none; position:relative; padding-bottom:4px;
+    }
+    .nav a::after {
+      content:""; position:absolute; left:0; bottom:0; width:100%; height:2px;
+      background:var(--color-water); opacity:0.5;
+    }
+    .nav a:hover::after { opacity:1; }
 
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 50px;
-            background: var(--color-rock-dark);
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-            border-bottom: 4px solid var(--color-water);
-            margin-bottom: 20px;
-        }
+    h1 {
+      text-align:center; padding:20px 0; font-size:28px;
+    }
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--color-water);
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-        }
+    /* Controls above poster */
+    .controls-container {
+      max-width:800px; margin:0 auto 20px; padding:20px;
+      background:var(--color-white);
+      border:2px solid #C8A887;
+      border-radius:8px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+    .controls-container h2 {
+      text-align:center; margin-bottom:15px;
+      color: var(--color-rock-dark);
+      border-bottom:2px solid var(--color-water);
+      padding-bottom:8px;
+    }
+    .control-row {
+      display:flex; flex-wrap:wrap; align-items:center;
+      gap:12px; margin-bottom:12px;
+    }
+    .control-row label {
+      width:140px; font-weight:bold; color:var(--color-rock-dark);
+    }
+    .control-row select,
+    .control-row input {
+      flex:1; min-width:120px;
+      padding:6px; border:1px solid #C8A887;
+      border-radius:4px; font-size:14px;
+    }
 
-        .nav {
-            display: flex;
-            gap: 30px;
-        }
+    /* Main layout: poster + plant */
+    .container {
+      display:flex; flex-wrap:wrap;
+      gap:30px; justify-content:center;
+      max-width:1000px; margin:0 auto 40px;
+      padding:0 10px;
+    }
 
-        .nav a {
-            text-decoration: none;
-            color:var(--color-white);
-            font-size: 16px;
-            padding: 5px 10;
-            position: relative;
-            transition: all 0.3s ease;
-            border-radius: 4px;
-        }
-        .nav a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        .nav a::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -3px;
-            width: 100%;
-            height: 2px;
-            background:var( --color-water);
-            opacity: 0.5;
-            transition: opacity 0.3s ease;
-        }
+    /* Poster styling */
+    .poster {
+      background: var(--color-light);
+      border:2px solid var(--color-rock-dark);
+      border-radius:8px;
+      box-shadow:0 3px 12px rgba(0,0,0,0.2);
+      width:100%; max-width:600px;
+      aspect-ratio:3/4;
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    /* Semicircular header */
+    .poster-header {
+      height:80px;
+      background: var(--color-water);
+      border-bottom-left-radius:50% 100%;
+      border-bottom-right-radius:50% 100%;
+      display:flex; align-items:center; justify-content:center;
+      color:white; font-size:1.5rem;
+      flex-shrink:0;
+    }
 
-        .nav a:hover::after {
-            opacity: 1;
-        }
+    /* Gallery of images */
+    .image-grid {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:10px;
+      padding:10px;
+      flex-shrink:0;
+    }
+    .image-grid img {
+      border:1px solid #C8A887;
+      border-radius:4px;
+      object-fit:cover;
+    }
 
-        h1 {
-            margin: 20px 0;
-            color: var(--color-rock-dark) !important;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-            font-size: 36px;
-        }
+    /* Text content in two columns */
+    .text-content {
+      padding:10px 20px;
+      flex-grow:1;
+      column-count:2;
+      column-gap:20px;
+      color: var(--color-rock-dark);
+      font-size: var(--textSize, 16px);
+      overflow-y:auto;
+    }
+    .text-content p { margin-bottom:1em; }
 
-        .controls-container {
-            background-color: var(--color-white);
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            padding: 20px;
-            border: 2px solid var(--color-rock-light);
-            max-width: 800px;
-            margin: 0 auto 20px;
-        }
+    /* Green footer bar */
+    .poster::after {
+      content:""; position:absolute; left:0; right:0; bottom:0;
+      height:60px; background:var(--color-plant);
+    }
 
-        .controls-container h2 {
-            color: var(--color-rock-dark);
-            text-align: center;
-            margin-top: 0;
-            border-bottom: 2px solid var(--color-water);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
+    /* Mark as Studied button */
+    .poster button {
+      position:absolute; bottom:20px; left:50%;
+      transform:translateX(-50%);
+      z-index:2;
+      background:var(--color-plant);
+      color:white;
+      border:none;
+      padding:8px 16px;
+      border-radius:4px;
+      cursor:pointer;
+      font-weight:bold;
+    }
 
-        .control-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            gap: 10px;
-        }
+    /* Plant-progress sidebar */
+    .plant-growth {
+      width:150px; height:400px;
+      border:2px solid var(--color-rock-dark);
+      border-radius:8px;
+      background:linear-gradient(to top,#C8A887,#FFFFFF);
+      box-shadow:0 3px 12px rgba(0,0,0,0.2);
+      position:relative;
+    }
+    .plant-growth::before {
+      content:"Learning Progress";
+      position:absolute; top:-28px; width:100%;
+      text-align:center; color:var(--color-rock-dark);
+    }
+    .plant-growth svg { width:100%; height:100%; }
 
-        label {
-            display: inline-block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: var(--color-rock-dark);
-            min-width: 150px;
-        }
+    /* Download button below */
+    .download-container {
+      text-align:center;
+      margin-bottom:40px;
+    }
+    .download-container button {
+      background:var(--color-plant);
+      color:white;
+      border:none;
+      padding:10px 20px;
+      border-radius:4px;
+      cursor:pointer;
+      font-weight:bold;
+    }
+    .download-container button:hover {
+      background:#52bd5a;
+    }
 
-        select, input {
-            padding: 8px 12px;
-            border-radius: 4px;
-            border: 1px solid var(--color-rock-light);
-            font-size: 14px;
-        }
-
-        select:focus, input:focus {
-            outline: 2px solid var(--color-water);
-            border-color: var(--color-water);
-        }
-
-        .custom-controls {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-
-        .color-options {
-            display: flex;
-            gap: 10px;
-        }
-
-        .color-swatch {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-
-        .color-swatch:hover, .color-swatch.active {
-            border-color: #333;
-        }
-
-        .swatch-rock-dark { background-color: var(--color-rock-dark); }
-        .swatch-rock-light { background-color: var(--color-rock-light); }
-        .swatch-water { background-color: var(--color-water); }
-        .swatch-plant { background-color: var(--color-plant); }
-        .swatch-white { background-color: var(--color-white); border: 1px solid #ddd; }
-
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 30px;
-            max-width: 1000px;
-            margin: 0 auto 40px;
-        }
-
-        .poster {
-            width: 600px;
-            height: 800px;
-            border: 2px solid var(--color-rock-dark);
-            padding: 20px;
-            position: relative;
-            background-color: white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .poster::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background-color: var(--color-plant);
-            z-index: 0;
-        }
-
-        .poster img {
-            width: 100%;
-            height: auto;
-            position: absolute;
-            top: 0;
-            left: 0;
-            opacity: 0.3;
-            z-index: 0;
-        }
-
-        .poster h2 {
-            position: relative;
-            z-index: 1;
-            color: var(--color-rock-dark);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--color-water);
-        }
-
-        .poster p {
-            position: relative;
-            z-index: 1;
-            margin-bottom: 20px;
-            flex-grow: 1;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        .plant-growth {
-            width: 150px;
-            height: 400px;
-            border: 2px solid var(--color-rock-dark);
-            border-radius: 8px;
-            display: flex;
-            align-items: flex-end;
-            overflow: hidden;
-            background: linear-gradient(to top, var(--color-rock-light) 0%, var(--color-white) 100%);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            position: relative;
-        }
-
-        .plant-growth::before {
-            content: "Learning Progress";
-            position: absolute;
-            top: -30px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            font-weight: bold;
-            color: var(--color-rock-dark);
-        }
-
-        .plant-growth::after {
-            content: "";
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            height: 1px;
-            background-color: rgba(0,0,0,0.1);
-            box-shadow: 0 20px 0 rgba(0,0,0,0.1), 0 40px 0 rgba(0,0,0,0.1), 
-                        0 60px 0 rgba(0,0,0,0.1), 0 80px 0 rgba(0,0,0,0.1),
-                        0 100px 0 rgba(0,0,0,0.1), 0 120px 0 rgba(0,0,0,0.1),
-                        0 140px 0 rgba(0,0,0,0.1), 0 160px 0 rgba(0,0,0,0.1),
-                        0 180px 0 rgba(0,0,0,0.1), 0 200px 0 rgba(0,0,0,0.1);
-        }
-
-        .plant {
-            width: 100%;
-            height: 10%;
-            background: linear-gradient(to top, var(--color-plant) 60%, #8dd293 100%);
-            transition: height 0.5s ease-in-out;
-            position: relative;
-            z-index: 1;
-        }
-
-        button {
-            background-color: var(--color-plant);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            margin: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 1;
-        }
-
-        button:hover {
-            background-color: #52bd5a;
-        }
-
-        .download-button {
-            display: block;
-            width: 200px;
-            margin: 20px auto;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .footer {
-            background-color: var(--color-rock-dark);
-            border-top: 4px solid var(--color-water);
-            padding: 20px 50px;
-            color: white;
-            font-size: 14px;
-            margin-top: 40px;
-        }
-
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            text-align: center;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .footer-links a {
-            text-decoration: none;
-            color: var(--color-white);
-            position: relative;
-        }
-
-        .footer-links a::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 100%;
-            height: 1px;
-            background: var(--color-water);
-            opacity: 0.5;
-            transition: opacity 0.3s;
-        }
-
-        .footer-links a:hover::after {
-            opacity: 1;
-        }
-    </style>
+    @media(max-width:800px){
+      .text-content { column-count:1; }
+      .image-grid img {
+        width: calc(50% - 20px); /* two per row on narrow screens */
+        height: auto;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">'Hydro - <span style="color: var(--color-white);">Rock</span></div>
-        <nav class="nav">
-            <a href="index.html">Home</a>
-            <a href="buildHydro.html">HydroBuild</a>
-            <a href="camTracker.html">Cam_Tracker</a>
-            <a href="videos.html">Videos</a>
-            <a href="play.html">Play Simulation</a>
-        </nav>
-    </header>
-    <h1>Hydroponics Learning Posters</h1>
-    
-    <div class="controls-container">
-        <h2>Create Your Hydroponic Learning Poster</h2>
-        
-        <div class="control-row">
-            <label for="category">Select a Category:</label>
-            <select id="category" onchange="generatePoster()">
-                <option value="build">What I Need to Build a Hydroponic System</option>
-                <option value="types">Types of Hydroponics</option>
-                <option value="media">Growing Mediums</option>
-                <option value="benefits">Benefits of Hydroponics</option>
-                <option value="future">Future of Hydroponics</option>
-                <option value="problems">Common Problems & Solutions</option>
-                <option value="diy">DIY Hydroponic Systems</option>
-            </select>
-        </div>
-        
-        <div class="control-row">
-            <label for="color">Background Color:</label>
-            <div class="color-options">
-                <div class="color-swatch swatch-rock-dark" onclick="setColor('#8B6242')" title="Rock Brown"></div>
-                <div class="color-swatch swatch-rock-light" onclick="setColor('#C8A887')" title="Light Brown"></div>
-                <div class="color-swatch swatch-water" onclick="setColor('#4BB3FD')" title="Water Blue"></div>
-                <div class="color-swatch swatch-plant" onclick="setColor('#63CF6C')" title="Plant Green"></div>
-                <div class="color-swatch swatch-white" onclick="setColor('#FFFFFF')" title="White"></div>
-                <input type="color" id="color" onchange="updatePoster()" style="margin-left: 10px;">
-            </div>
-        </div>
-        
-        <div class="control-row">
-            <label for="font">Font Style:</label>
-            <select id="font" onchange="updatePoster()">
-                <option value="Arial">Arial</option>
-                <option value="Times New Roman">Times New Roman</option>
-                <option value="Courier New">Courier New</option>
-                <option value="Georgia">Georgia</option>
-                <option value="Verdana">Verdana</option>
-                <option value="Trebuchet MS">Trebuchet MS</option>
-            </select>
-        </div>
-    </div>
-    
-    <div class="container">
-        <div id="poster" class="poster">
-            <img id="posterImage" src="" alt="">
-            <h2 id="posterTitle">Select a category to generate a poster</h2>
-            <p id="posterContent"></p>
-            <button onclick="markAsStudied()">Mark as Studied</button>
-        </div>
-        <div class="plant-growth">
-            <div id="plant" class="plant"></div>
-        </div>
-    </div>
-    
-    <button class="download-button" onclick="downloadPDF()">Download as PDF</button>
-    
-    <script>
-        const posterData = {
-            build: { title: "Building a Hydroponic System", content: "You need a water reservoir, nutrient solution, pump, and grow trays. The water reservoir holds the nutrient solution that will feed your plants. Make sure to choose food-safe containers that won't leach chemicals. The nutrient solution contains all the essential elements plants need to grow. A good pump ensures proper circulation and oxygenation. Grow trays support your plants and growing medium.", images: ["build1.jpg", "build2.jpg"] },
-            types: { title: "Types of Hydroponics", content: "Popular types include NFT (Nutrient Film Technique), Deep Water Culture (DWC), and Aeroponics. NFT systems feature a continuous flow of nutrient solution in a thin film over the roots. DWC suspends plant roots directly in nutrient-rich, oxygenated water. Aeroponics mists exposed plant roots with nutrient solution, providing maximum oxygen exposure.", images: ["types1.jpg", "types2.jpg"] },
-            media: { title: "Hydroponic Growing Mediums", content: "Common mediums include Rockwool, Perlite, and Clay Pellets (LECA). Rockwool provides excellent water retention while still allowing good aeration. Perlite is lightweight and prevents compaction while providing good drainage. Clay pellets are reusable, provide good support, and help maintain consistent moisture levels around the roots.", images: ["media1.jpg", "media2.jpg"] },
-            benefits: { title: "Benefits of Hydroponics", content: "Hydroponics saves water (up to 90% less than traditional farming), requires less space, and leads to faster plant growth (30-50% faster than soil). Plants grown hydroponically often have higher nutritional value and are less susceptible to soil-borne diseases. Hydroponic systems can be set up anywhere, including indoors and in urban environments, allowing year-round growing regardless of climate.", images: ["benefits1.jpg", "benefits2.jpg"] },
-            future: { title: "Future of Hydroponics", content: "Advancements in AI and automation are making hydroponics more efficient. Smart systems can now monitor and adjust nutrient levels, pH, and lighting automatically. Vertical farming combines hydroponics with space-efficient designs to maximize yield in urban areas. Researchers are developing new nutrient formulations specific to different plant types for optimal growth and nutritional content.", images: ["future1.jpg", "future2.jpg"] },
-            problems: { title: "Common Hydroponic Problems", content: "Common issues include nutrient deficiencies, algae growth, and root rot. Nutrient deficiencies often appear as discolored leaves and can be corrected by adjusting your nutrient solution. Algae thrive in light and nutrient-rich water - keep reservoirs dark to prevent growth. Root rot is usually caused by insufficient oxygen in the water and can be prevented with proper aeration.", images: ["problems1.jpg", "problems2.jpg"] },
-            diy: { title: "DIY Hydroponics", content: "You can build a small system using household materials like buckets and PVC pipes. A simple Deep Water Culture system can be made with a food-safe bucket, air pump, air stone, and net pots. Kratky method systems require no electricity - just a container, nutrient solution, and a net pot. Mason jar herb gardens are perfect for beginners wanting to grow herbs on windowsills.", images: ["diy1.jpg", "diy2.jpg"] }
-        };
-        
-        let progress = 10;
-        
-        function generatePoster() {
-            const category = document.getElementById("category").value;
-            const data = posterData[category];
-            document.getElementById("posterTitle").innerText = data.title;
-            document.getElementById("posterContent").innerText = data.content;
-            document.getElementById("posterImage").src = data.images[Math.floor(Math.random() * data.images.length)];
-        }
-        
-        function updatePoster() {
-            document.getElementById("poster").style.backgroundColor = document.getElementById("color").value;
-            document.getElementById("poster").style.fontFamily = document.getElementById("font").value;
-        }
-        
-        function setColor(colorValue) {
-            document.getElementById("color").value = colorValue;
-            updatePoster();
-        }
-        
-        function markAsStudied() {
-            if (progress < 100) {
-                progress += 15;
-                document.getElementById("plant").style.height = progress + "%";
-            }
-        }
-        
-        function downloadPDF() {
-            // Add PDF download functionality when jsPDF is available
-            if (window.jspdf) {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                doc.text(document.getElementById("posterTitle").innerText, 20, 30);
-                doc.text(document.getElementById("posterContent").innerText, 20, 50);
-                doc.save("Hydroponics_Poster.pdf");
-            } else {
-                alert("PDF generation is not available. Please uncomment the jsPDF script in the HTML.");
-            }
-        }
-        
-        // Initialize with default values
-        window.onload = function() {
-            document.getElementById("color").value = "#FFFFFF";
-        }
-    </script>
-</body>
-<footer class="footer">
-    <p>© 2025 HydroRock Team | Interactive Learning for a Greener Future 🌱</p>
-    <p>
-        Visit our hydroponic Dashboard:
-        <a
-          href="https://hydrorock-monitoring.onrender.com/ui/"
-          target="_blank"
-          rel="noopener"
-        >
-          HydroRock Dashboard
-        </a>
-      </p>
-</footer>
 
+    <header class="header">
+        <div class="logo">
+          <img src="images/HydroRockLogo.png" alt="HydroRock Logo" >
+        </div>
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="videos.html">Videos</a>
+          <a href="camTracker.html">Cam_Tracker</a>
+          <a href="play.html">Play Simulation</a>
+          <a href="buildHydro.html">HydroBuild</a>
+        </nav>
+      </header>
+
+  <h1>Hydroponics Learning Posters</h1>
+
+  <div class="controls-container">
+    <h2>Customize Your Poster</h2>
+    <div class="control-row">
+      <label for="category">Category:</label>
+      <select id="category">
+        <option value="types">Types of Hydroponics</option>
+        <option value="media">Growing Mediums</option>
+        <option value="benefits">Benefits</option>
+        <option value="future">Future</option>
+        <option value="problems">Common Problems</option>
+        <option value="diy">DIY Systems</option>
+      </select>
+    </div>
+    <div class="control-row">
+      <label for="numImages"># Images (1–6):</label>
+      <input type="number" id="numImages" min="1" max="6" value="2"/>
+    </div>
+    <div class="control-row">
+      <label for="imageSize">Image Size (px):</label>
+      <input type="range" id="imageSize" min="60" max="200" value="120"/>
+    </div>
+    <div class="control-row">
+      <label for="textColor">Text Color:</label>
+      <input type="color" id="textColor" value="#333333"/>
+    </div>
+    <div class="control-row">
+      <label for="textSize">Text Size (px):</label>
+      <input type="range" id="textSize" min="12" max="24" value="16"/>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="poster" id="poster">
+      <div class="poster-header">
+        <h2 id="posterTitle">Select options above</h2>
+      </div>
+      <div class="image-grid" id="gallery"></div>
+      <div class="text-content" id="textLayer"></div>
+      <button onclick="markAsStudied()">Mark as Studied</button>
+    </div>
+    <div class="plant-growth">
+      <svg viewBox="0 0 50 200" preserveAspectRatio="xMidYMax meet">
+        <path id="stem" d="M25,200 L25,200" stroke="var(--color-plant)" stroke-width="4" fill="none"/>
+        <path id="leaf1" d="" fill="var(--color-plant)"/>
+        <path id="leaf2" d="" fill="var(--color-plant)"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="download-container">
+    <button onclick="downloadPDF()">Download as PDF</button>
+  </div>
+
+  <script>
+    const topics = {
+      types: {
+        title: "Hydroponic System Types",
+        images: ["images/types%20of%20hydroponics.png","images/types%20of%20hydroponics2.png","images/hydroponic1.jpeg","images/hydroponic2.jpeg"],
+        textPoints: [
+          "Nutrient Film Technique (NFT): A thin film of nutrient-rich water flows over roots.",
+          "Deep Water Culture (DWC): Roots are suspended in oxygenated nutrient solution.",
+          "Ebb & Flow: Trays are periodically flooded then drained to aerate roots.",
+          "Aeroponics: Roots hang in air and are misted with nutrient solution."
+        ]
+      },
+      media: {
+        title: "Growing Mediums",
+        images: ["images/media1.jpg","images/media2.jpeg","images/media3.png","images/media4.jpg","images/media5.jpg"],
+        textPoints: [
+          "Rockwool retains water and aeration.",
+          "Perlite is lightweight and drains well.",
+          "Clay pellets (LECA) are reusable and hold moisture.",
+          "Coco coir is pH-neutral and eco-friendly."
+        ]
+      },
+      benefits: {
+        title: "Benefits of Hydroponics",
+        images: ["images/benefit.jpeg","images/benefit1.jpeg","images/benefit5.jpg","images/benefits%20of%20hydrosystem.png"],
+        textPoints: [
+          "Uses up to 90% less water than soil farming.",
+          "Grows 30–50% faster with optimized nutrition.",
+          "Space-efficient: ideal for vertical or urban farms.",
+          "Fewer pests and diseases in soilless systems.",
+          "Year-round production regardless of season."
+        ]
+      },
+      future: {
+        title: "The Future of Hydroponics",
+        images: ["images/future1.jpeg","images/future2.jpeg","images/future3.jpeg"],
+        textPoints: [
+          "Urban vertical farms bring food production to cities.",
+          "IoT and AI optimize nutrients and climate in real-time.",
+          "Hydroponics is key for space and extreme-environment crops.",
+          "Scalable systems reduce environmental impact."
+        ]
+      },
+      problems: {
+        title: "Common Hydroponic Problems",
+        images: ["images/requirement1.jpeg","images/requirement2.jpeg","images/requirement5.jpeg"],
+        textPoints: [
+          "Higher setup cost for pumps, lights, and controllers.",
+          "Requires technical know-how for nutrient and pH management.",
+          "Dependent on electricity—outages can harm plants.",
+          "Waterborne diseases spread quickly in shared reservoirs."
+        ]
+      },
+      diy: {
+        title: "DIY Hydroponics",
+        images: ["images/DIY.webp"],
+        textPoints: [
+          "Build a basic DWC system with a bucket and air pump.",
+          "Use common materials (PVC, totes, aquarium pumps) affordably.",
+          "Mix quality hydroponic nutrients and monitor pH regularly.",
+          "Provide adequate light; supplement with grow lights as needed.",
+          "Observe and tweak daily for best results."
+        ]
+      }
+    };
+
+    function pickN(arr,n){
+      const a=[...arr],r=[];
+      for(let i=0;i<n&&a.length;i++){
+        r.push(a.splice(Math.floor(Math.random()*a.length),1)[0]);
+      }
+      return r;
+    }
+
+    function renderPoster(){
+      const cat = document.getElementById("category").value;
+      const data = topics[cat];
+      document.getElementById("posterTitle").innerText = data.title;
+
+      // Images
+      const gallery = document.getElementById("gallery");
+      gallery.innerHTML = "";
+      const num   = +document.getElementById("numImages").value;
+      const size  = +document.getElementById("imageSize").value;
+      pickN(data.images, num).forEach(src=>{
+        const img = new Image();
+        img.src = src;
+        img.style.width = size + "px";
+        img.style.height = "auto";
+        gallery.appendChild(img);
+      });
+
+      // Text
+      const layer = document.getElementById("textLayer");
+      layer.innerHTML = "";
+      const color = document.getElementById("textColor").value;
+      const tsize = document.getElementById("textSize").value + "px";
+      layer.style.color    = color;
+      layer.style.fontSize = tsize;
+      data.textPoints.forEach(pt=>{
+        const p = document.createElement("p");
+        p.innerText = pt;
+        layer.appendChild(p);
+      });
+    }
+
+    let progress = 0;
+    function markAsStudied(){
+      if(progress>=100) return;
+      progress += 20;
+      const stem  = document.getElementById("stem");
+      const leaf1 = document.getElementById("leaf1");
+      const leaf2 = document.getElementById("leaf2");
+      const total = 160, h = total*(progress/100), y0 = 200-h;
+      stem.setAttribute("d",`M25,200 L25,${y0}`);
+      if(progress>=40) leaf1.setAttribute("d",
+        `M25,${y0+20} C5,${y0+10} 5,${y0+40} 25,${y0+30}`);
+      if(progress>=60) leaf2.setAttribute("d",
+        `M25,${y0+40} C45,${y0+30} 45,${y0+60} 25,${y0+50}`);
+    }
+
+    function downloadPDF(){
+      html2canvas(document.getElementById("poster"),{scale:2})
+        .then(canvas=>{
+          const img = canvas.toDataURL("image/png");
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF({
+            orientation:"portrait",
+            unit:"px",
+            format:[canvas.width,canvas.height]
+          });
+          pdf.addImage(img,"PNG",0,0,canvas.width,canvas.height);
+          pdf.save("Poster.pdf");
+        });
+    }
+
+    window.onload = ()=>{
+      ["category","numImages","imageSize","textColor","textSize"]
+        .forEach(id=>
+          document.getElementById(id)
+            .addEventListener("change",renderPoster)
+        );
+      renderPoster();
+    };
+  </script>
+</body>
 </html>

@@ -56,12 +56,7 @@
             margin-bottom: 20px;
         }
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--color-water);
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-        }
+        .logo img { max-height: 75px; }
 
         .nav {
             display: flex;
@@ -306,49 +301,30 @@
 </head>
 <body>
     <header class="header">
-        <div class="logo">'Hydro - <span style="color: var(--color-white);">Rock</span></div>
+        <div class="logo">
+          <img src="images/HydroRockLogo.png" alt="HydroRock Logo" >
+        </div>
         <nav class="nav">
-            <a href="index.html">Home</a>
-            <a href="buildHydro.html">HydroBuild</a>
-            <a href="camTracker.html">Cam_Tracker</a>
-            <a href="videos.html">Videos</a>
-            <a href="play.html">Play Simulation</a>
+          <a href="index.html">Home</a>
+          <a href="videos.html">Videos</a>
+          <a href="camTracker.html">Cam_Tracker</a>
+          <a href="buildHydro.html">HydroBuild</a>
+          <a href="LetsLearn.html">HydroLearn</a>
+
+          
+
         </nav>
-    </header>
+      </header>
 
     <h1>Hydroponics Simulation</h1>
+
+    <p id="statusText">Adjust the sliders and simulate days to grow your plant!</p>
     
     <div class="simulation-container">
-        <canvas id="gameCanvas" width="400" height="500"></canvas>
+        <canvas id="gameCanvas" width="550" height="700"></canvas>
         
         <div class="controls-stats-container">
-            <div class="controls-container">
-                <h2>Plant Growth Controls</h2>
-                <div class="controls">
-                    <div class="control-row">
-                        <label>Water: <span id="waterValue" class="value-display">50</span>
-                            <input type="range" id="waterSlider" min="0" max="100" value="50">
-                        </label>
-                    </div>
-                    <div class="control-row">
-                        <label>Nutrients: <span id="nutrientValue" class="value-display">50</span>
-                            <input type="range" id="nutrientSlider" min="0" max="100" value="50">
-                        </label>
-                    </div>
-                    <div class="control-row">
-                        <label>Light: <span id="lightValue" class="value-display">50</span>
-                            <input type="range" id="lightSlider" min="0" max="100" value="50">
-                        </label>
-                    </div>
-                    <div class="control-row">
-                        <label>Simulate Days: 
-                            <input type="number" id="daysInput" min="1" max="30" value="1">
-                        </label>
-                    </div>
-                    <button id="simulateBtn">Simulate Growth</button>
-                    <button id="resetBtn">Reset Simulation</button>
-                </div>
-            </div>
+            
             
             <div class="stats-container">
                 <h2>Plant Statistics</h2>
@@ -377,10 +353,38 @@
                     <span id="plantStatus" class="stat-value">Seedling</span>
                 </div>
             </div>
+
+            <div class="controls-container">
+                <h2>Plant Growth Controls</h2>
+                <div class="controls">
+                    <div class="control-row">
+                        <label>Water: <span id="waterValue" class="value-display">50</span>
+                            <input type="range" id="waterSlider" min="0" max="100" value="50">
+                        </label>
+                    </div>
+                    <div class="control-row">
+                        <label>Nutrients: <span id="nutrientValue" class="value-display">50</span>
+                            <input type="range" id="nutrientSlider" min="0" max="100" value="50">
+                        </label>
+                    </div>
+                    <div class="control-row">
+                        <label>Light: <span id="lightValue" class="value-display">50</span>
+                            <input type="range" id="lightSlider" min="0" max="100" value="50">
+                        </label>
+                    </div>
+                    <div class="control-row">
+                        <label>Simulate Days: 
+                            <input type="number" id="daysInput" min="1" max="30" value="1">
+                        </label>
+                    </div>
+                    <button id="simulateBtn">Simulate Growth</button>
+                    <button id="resetBtn">Reset Simulation</button>
+                </div>
+            </div>
         </div>
     </div>
     
-    <p id="statusText">Adjust the sliders and simulate days to grow your plant!</p>
+   
 
     <footer class="footer">
         <p>© 2025 HydroRock Team | Interactive Learning for a Greener Future 🌱</p>

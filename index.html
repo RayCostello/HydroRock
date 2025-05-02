@@ -1,177 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HydroRock Interactive Learning Hub</title>
-    <style>
-        /* Ensure page is scrollable */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow-y: auto; /* Allows scrolling */
-            display: flex;
-            flex-direction: column;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HydroRock Interactive Learning Hub</title>
+  <style>
+    /* === Base Styles === */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .video-background {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+    .overlay {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 0;
+    }
+    body {
+      color: white;
+      font-family: 'Lucida Sans', 'Lucida Grande', Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+    }
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 50px;
+    }
+    header {
+      padding: 60px 20px;
+    }
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    header p {
+      font-size: 1.5rem;
+    }
 
-        /* 🎥 Video Background */
-        .video-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1; /* Sends it behind content */
-        }
+    /* === Adaptive Card Grid === */
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      justify-items: center;       /* center cards in their grid cell */
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
 
-        /* 🌓 Dark Overlay to Improve Readability */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4); /* Semi-transparent black */
-            z-index: 0;
-        }
+    /* === Card Styles === */
+    a.card {
+      width: 100%;
+      max-width: 350px;            /* caps how wide a card can get */
+      font-family: inherit;
+      background-color: #8B6242;
+      padding: clamp(1rem, 2vw, 2rem);
+      border-radius: clamp(0.75rem, 1vw, 2rem);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      text-decoration: none;
+      color: white;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    a.card:hover {
+      background-color: #C8A887;
+      transform: translateY(-5px);
+    }
+    a.card h2 {
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      margin-bottom: 0.5em;
+    }
+    a.card p {
+      font-size: clamp(0.875rem, 1.5vw, 1.125rem);
+      line-height: 1.4;
+    }
 
-        /* Body Styling */
-        body {
-            color: white;
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 
-                         'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-        }
+    /* === Footer === */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #C8A887;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
 
-        /* Ensures content takes up space and allows scrolling */
-        .content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding-bottom: 50px;
-            position: relative;
-            z-index: 1;
-        }
-
-        header {
-            padding: 60px 20px;
-        }
-
-        header h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-
-        header p {
-            font-size: 1.5rem;
-        }
-
-        main {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px 60px;
-        }
-
-        a.card {
-            background-color: #8B6242;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            text-decoration: none;
-            color: white;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        a.card:hover {
-            background-color: #C8A887;
-            transform: translateY(-5px);
-        }
-
-        a.card h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        
-        a.card p {
-            font-size: 1rem;
-        }
-
-        /* Sticky Footer */
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #C8A887;
-            position: relative;
-            z-index: 1;
-            width: 100%;
-        }
-    </style>
+    /* === Responsive Breakpoints === */
+    @media (max-width: 768px) {
+      header h1 { font-size: 2.5rem; }
+      header p  { font-size: 1.2rem; }
+      main       { gap: 15px; }
+    }
+    @media (max-width: 480px) {
+      header h1 { font-size: 2rem; }
+      header p  { font-size: 1rem; }
+      main       { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- 🎥 Video Background -->
-    <video autoplay muted loop playsinline class="video-background">
-        <source src="4 Sfundo.mp4" type="video/mp4" />
-        Your browser does not support HTML5 video.
-    </video>
+  <!-- 🎥 Video Background -->
+  <video autoplay muted loop playsinline class="video-background">
+    <source src="4 Sfundo.mp4" type="video/mp4" />
+    Your browser does not support HTML5 video.
+  </video>
+  <div class="overlay"></div>
 
-    <!-- 🌓 Dark Overlay for readability -->
-    <div class="overlay"></div>
+  <div class="content">
+    <header>
+      <div class="logo">
+        <img src="images/HydroRockLogo.png" alt="HydroRock Logo" width="180" height="100"/>
+      </div>
+      <h1>Hydroponics Interactive Learning Hub</h1>
+      <p>Explore, Learn, and Grow with Interactive Educational Tools</p>
+    </header>
+    
+    <main>
+      <a href="videos.html" class="card">
+        <h2>Interactive Video Lessons</h2>
+        <p>Watch and engage with videos that include questions, hotspots, and branching scenarios.</p>
+      </a>
+      <a href="buildHydro.html" class="card">
+        <h2>Drag-and-Drop Simulations</h2>
+        <p>Build your own hydroponic system with interactive drag-and-drop elements and instant feedback.</p>
+      </a>
+      <a href="play.html" class="card">
+        <h2>Data Exploration Widgets</h2>
+        <p>Explore real-time plant growth data and simulate changes in pH, temperature, and more.</p>
+      </a>
+      <a href="camTracker.html" class="card">
+        <h2>Virtual Garden Tracker</h2>
+        <p>Track your virtual garden progress and earn badges for milestones and growth achievements.</p>
+      </a>
+      <a href="LetsLearn.html" class="card">
+        <h2>Interactive Story Journey</h2>
+        <p>Become a virtual hydroponics farmer and make decisions that affect plant growth outcomes.</p>
+      </a>
+    </main>
+  </div>
 
-    <div class="content">
-        <header>
-            <h1>Hydroponics Interactive Learning Hub</h1>
-            <p>Explore, Learn, and Grow with Interactive Educational Tools</p>
-        </header>
-        
-        <main>
-            <a href="videos.html" class="card">
-                <h2>Interactive Video Lessons</h2>
-                <p>Watch and engage with videos that include questions, hotspots, and branching scenarios.</p>
-            </a>
-            <a href="buildHydro.html" class="card">
-                <h2>Drag-and-Drop Simulations</h2>
-                <p>Build your own hydroponic system with interactive drag-and-drop elements and instant feedback.</p>
-            </a>
-
-            <a href="play.html" class="card">
-                <h2>Data Exploration Widgets</h2>
-                <p>Explore real-time plant growth data and simulate changes in pH, temperature, and more.</p>
-            </a>
-            <a href="camTracker.html" class="card">
-                <h2>Virtual Garden Tracker</h2>
-                <p>Track your virtual garden progress and earn badges for milestones and growth achievements.</p>
-            </a>
-            <a href="LetsLearn.html" class="card">
-                <h2>Interactive Story Journey</h2>
-                <p>Become a virtual hydroponics farmer and make decisions that affect plant growth outcomes.</p>
-            </a>
-
-        </main>
-    </div>
-
-    <footer>
-        <p>© 2025 HydroRock Team | Interactive Learning for a Greener Future 🌱</p>
-        <p>
-            Visit our hydroponic Dashboard:
-            <a
-              href="https://hydrorock-monitoring.onrender.com/ui/"
-              target="_blank"
-              rel="noopener"
-            >
-              HydroRock Dashboard
-            </a>
-          </p>
-          
-    </footer>
+  <footer>
+    <p>© 2025 HydroRock Team | Interactive Learning for a Greener Future 🌱</p>
+    <p>
+      Visit our hydroponic Dashboard:
+      <a href="https://hydrorock-monitoring.onrender.com/ui/" target="_blank" rel="noopener">
+        HydroRock Dashboard
+      </a>
+    </p>
+  </footer>
 
 </body>
 </html>
